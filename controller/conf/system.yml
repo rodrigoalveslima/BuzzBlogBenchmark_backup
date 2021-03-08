@@ -47,6 +47,7 @@
         worker_connections: 512
         apigateway_servers:
           - "{{node-1}}:8080"
+          - "{{node-2}}:8080"
     uwsgi.ini:
       output: "/etc/uwsgi/uwsgi.ini"
       params:
@@ -137,6 +138,97 @@
         interval: "50ms"
         buffer: "16MiB"
 {{node-2}}:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  kernel:
+    net.ipv4.tcp_tw_reuse: 1
+    net.ipv4.tcp_abort_on_overflow: 1
+    net.ipv4.ip_local_port_range: "32768 65535"
+    net.core.somaxconn: 128
+  templates:
+    uwsgi.ini:
+      output: "/etc/uwsgi/uwsgi.ini"
+      params:
+        params:
+          http-socket: "0.0.0.0:81"
+          # uWSGI cheaper subsystem docs:
+          # https://uwsgi-docs.readthedocs.io/en/latest/Cheaper.html
+          cheaper-busyness-verbose: "true"
+          # min workers
+          cheaper: 2
+          # initial workers
+          cheaper-initial: 4
+          # max workers
+          workers: 16
+          # cheaper algorithm
+          cheaper-algo: "spare"
+          # time window to track workers
+          cheaper-overload: 3
+          # no. of workers spawned at a time
+          cheaper-step: 1
+          # max busyness allowed
+          cheaper-busyness-max: 50
+          # min busyness allowed
+          cheaper-busyness-min: 25
+          # no. of idle cycles needed before stopping a worker
+          cheaper-busyness-multiplier: 20
+          # if a worker is spawned in less time than needed to cheap a worker,
+          # increment the multiplier by this value
+          cheaper-busyness-penalty: 1
+          # if the listen queue length is greater than this value, emergency
+          # workers are spawned (checked every second)
+          cheaper-busyness-backlog-alert: 33
+          # no. of idle cycles needed before stopping an emergency worker
+          cheaper-busyness-backlog-multiplier: 3
+          # no. of emergency workers spawned at a time
+          busyness-backlog-step: 1
+          # if the listen queue length > 0 for this amount of seconds, emergency
+          # workers are spawned
+          busyness-backlog-nonzero: 60
+  containers:
+    apigateway:
+      image: "rodrigoalveslima/buzzblog:apigateway_v0.1"
+      options:
+        name: "apigateway"
+        publish: "8080:81"
+        volume:
+          - "/etc/uwsgi:/etc/uwsgi"
+          - "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        cpuset-cpus: "8-15"
+        memory: "8g"
+  monitors:
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "0.05"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+    tcplife-bpfcc:
+      dirpath: "/tmp/tcplife-bpfcc"
+      log: "/tmp/tcplife-bpfcc/tcplife-bpfcc.log"
+      niceness: 19
+      options:
+        wide: ""
+        csv: ""
+        timestamp: ""
+        time: ""
+    radvisor:
+      dirpath: "/tmp/radvisor"
+      command: "radvisor run docker"
+      niceness: 19
+      options:
+        quiet: ""
+        directory: "/tmp/radvisor"
+        poll: "1s"
+        interval: "50ms"
+        buffer: "16MiB"
+{{node-3}}:
   ssh:
     username: "{{username}}"
     port: 22
@@ -256,7 +348,127 @@
         poll: "1s"
         interval: "50ms"
         buffer: "16MiB"
-{{node-3}}:
+{{node-4}}:
+  ssh:
+    username: "{{username}}"
+    port: 22
+    key_filename: "/home/{{username}}/.ssh/id_rsa"
+  kernel:
+    net.ipv4.tcp_tw_reuse: 1
+    net.ipv4.tcp_abort_on_overflow: 1
+    net.ipv4.ip_local_port_range: "32768 65535"
+    net.core.somaxconn: 128
+  containers:
+    account_service:
+      image: "rodrigoalveslima/buzzblog:account_v0.1"
+      options:
+        name: "account_service"
+        publish: "9090:9090"
+        volume: "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        env:
+          - "port=9090"
+          - "threads=8"
+          - "backend_filepath=/etc/opt/BuzzBlogApp/backend.yml"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+          - "postgres_dbname=postgres"
+        cpuset-cpus: "0-3"
+        memory: "4g"
+    follow_service:
+      image: "rodrigoalveslima/buzzblog:follow_v0.1"
+      options:
+        name: "follow_service"
+        publish: "9092:9092"
+        volume: "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        env:
+          - "port=9092"
+          - "threads=8"
+          - "backend_filepath=/etc/opt/BuzzBlogApp/backend.yml"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+          - "postgres_dbname=postgres"
+        cpuset-cpus: "4-6"
+        memory: "3g"
+    like_service:
+      image: "rodrigoalveslima/buzzblog:like_v0.1"
+      options:
+        name: "like_service"
+        publish: "9093:9093"
+        volume: "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        env:
+          - "port=9093"
+          - "threads=8"
+          - "backend_filepath=/etc/opt/BuzzBlogApp/backend.yml"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+          - "postgres_dbname=postgres"
+        cpuset-cpus: "7-9"
+        memory: "3g"
+    post_service:
+      image: "rodrigoalveslima/buzzblog:post_v0.1"
+      options:
+        name: "post_service"
+        publish: "9094:9094"
+        volume: "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        env:
+          - "port=9094"
+          - "threads=8"
+          - "backend_filepath=/etc/opt/BuzzBlogApp/backend.yml"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+          - "postgres_dbname=postgres"
+        cpuset-cpus: "10-12"
+        memory: "3g"
+    uniquepair_service:
+      image: "rodrigoalveslima/buzzblog:uniquepair_v0.1"
+      options:
+        name: "uniquepair_service"
+        publish: "9095:9095"
+        volume: "/etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp"
+        detach: ""
+        env:
+          - "port=9095"
+          - "threads=8"
+          - "backend_filepath=/etc/opt/BuzzBlogApp/backend.yml"
+          - "postgres_user=postgres"
+          - "postgres_password=postgres"
+          - "postgres_dbname=postgres"
+        cpuset-cpus: "13-15"
+        memory: "3g"
+  monitors:
+    collectl:
+      dirpath: "/tmp/collectl"
+      niceness: 19
+      options:
+        filename: "/tmp/collectl/coll"
+        interval: "0.05"
+        subsys: "CDM"
+        options: "Tm"
+        plot: ""
+    tcplife-bpfcc:
+      dirpath: "/tmp/tcplife-bpfcc"
+      log: "/tmp/tcplife-bpfcc/tcplife-bpfcc.log"
+      niceness: 19
+      options:
+        wide: ""
+        csv: ""
+        timestamp: ""
+        time: ""
+    radvisor:
+      dirpath: "/tmp/radvisor"
+      command: "radvisor run docker"
+      niceness: 19
+      options:
+        quiet: ""
+        directory: "/tmp/radvisor"
+        poll: "1s"
+        interval: "50ms"
+        buffer: "16MiB"
+{{node-5}}:
   ssh:
     username: "{{username}}"
     port: 22

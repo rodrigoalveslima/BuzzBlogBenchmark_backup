@@ -25,6 +25,12 @@ while [[ $# > 1 ]]; do
     --node_3 )
       node_3=$2
       ;;
+    --node_4 )
+      node_4=$2
+      ;;
+    --node_5 )
+      node_5=$2
+      ;;
     * )
       echo "Invalid argument: $1"
       exit 1
@@ -59,4 +65,6 @@ ssh -o StrictHostKeyChecking=no ${username}@${node_0} "
   sed -i \"s/{{node-1}}/${node_1}/g\" system.yml
   sed -i \"s/{{node-2}}/${node_2}/g\" system.yml
   sed -i \"s/{{node-3}}/${node_3}/g\" system.yml
+  sed -i \"s/{{node-4}}/${node_4}/g\" system.yml
+  sed -i \"s/{{node-5}}/${node_5}/g\" system.yml
 "
