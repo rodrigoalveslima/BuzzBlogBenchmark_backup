@@ -3,6 +3,9 @@
 # Copyright (C) 2020 Georgia Tech Center for Experimental Research in Computer
 # Systems
 
+# Default arguments
+branch="main"
+
 # Process command-line arguments.
 set -u
 while [[ $# > 1 ]]; do
@@ -31,6 +34,9 @@ while [[ $# > 1 ]]; do
     --node_5 )
       node_5=$2
       ;;
+    --branch )
+      branch=$2
+      ;;
     * )
       echo "Invalid argument: $1"
       exit 1
@@ -55,7 +61,7 @@ ssh -o StrictHostKeyChecking=no ${username}@${node_0} "
 
   # Clone this repository to get the experiment configuration files.
   ssh-keygen -F github.com || ssh-keyscan github.com >> ~/.ssh/known_hosts
-  git clone git@github.com:rodrigoalveslima/BuzzBlogBenchmark.git
+  git clone git@github.com:rodrigoalveslima/BuzzBlogBenchmark.git --single-branch --branch \"$branch\"
   mv BuzzBlogBenchmark/controller/conf/* .
   rm -rf BuzzBlogBenchmark
 
