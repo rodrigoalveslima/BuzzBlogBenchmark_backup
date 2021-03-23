@@ -10,6 +10,7 @@ import threading
 import time
 
 import jinja2
+import papermill
 import yaml
 
 from ssh_client import SSHClient
@@ -24,6 +25,8 @@ METADATA = {}
 SYS_CONF = {}
 WL_CONF = {}
 BACKEND_CONF = {}
+ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "templates/BuzzBlogExperimentAnalysisTemplate.ipynb"
+ANALYSIS_NOTEBOOK_OUTPUT_PATH = "BuzzBlogExperimentAnalysisOutput.ipynb"
 
 
 ### Utilities
@@ -351,6 +354,7 @@ def run():
   stop_monitors()
   fetch_monitoring_data()
   fetch_container_logs()
+  execute_notebook()
 
 
 ### Main program
@@ -425,6 +429,68 @@ def main():
   run()
   # Update experiment metadata.
   update_metadata({"end_time": timestamp()})
+
+
+def execute_notebook():
+  papermill.execute_notebook(
+    input_path=ANALYSIS_NOTEBOOK_TEMPLATE_PATH,
+    # Path to save executed notebook is same as input_path.
+    output_path=ANALYSIS_NOTEBOOK_OUTPUT_PATH,
+    # Arbitrary keyword arguments to pass to the notebook parameters.
+    parameters=dict(
+      # GENERAL
+      # Environment (options: "colab", "local")
+      ENV="local",
+      # Experiment directory name
+      EXPERIMENT="../../docs/sample/BuzzBlogBenchmark_2021-03-18-14-14-16",
+      LOADGEN_NODE="apt087.apt.emulab.net",
+      # DIRECTORY STRUCTURE
+      LOADBALANCER_NODE="apt078.apt.emulab.net",
+      APIGATEWAY_NODE="apt078.apt.emulab.net",
+      ACCOUNT_SERVICE_NODE="apt083.apt.emulab.net",
+      ACCOUNT_DB_NODE="apt080.apt.emulab.net",
+      FOLLOW_SERVICE_NODE="apt083.apt.emulab.net",
+      LIKE_SERVICE_NODE="apt083.apt.emulab.net",
+      POST_SERVICE_NODE="apt083.apt.emulab.net",
+      POST_DB_NODE="apt080.apt.emulab.net",
+      UNIQUEPAIR_SERVICE_NODE="apt083.apt.emulab.net",
+      UNIQUEPAIR_DB_NODE="apt080.apt.emulab.net",
+      # REQUEST LOGS
+      # Fine-grained window to group PIT data
+      PIT_FG_WINDOW_IN_MS=50,
+      # Function to aggregate PIT data
+      PIT_AGGREGATE_FUNC="max",
+      # SYSTEM EVENT MONITORING LOGS
+      # TCPLIFE
+      # Fine-grained window to group TCP connection lifespan
+      TCPLIFE_FG_WINDOW_IN_MS=25,
+      # SYSTEM RESOURCE MONITORING LOGS
+      # COLLECTL
+      # Fine-grained window to group Collectl measurements
+      COLLECTL_FG_WINDOW_IN_MS=50,
+      # Function to aggregate Collectl measurements
+      COLLECTL_AGGREGATE_FUNC="max",
+      # CPU metric to be analyzed (options: "user", "nice", "system",
+      # "wait", "irq", "soft", "steal", "idle", "total", "guest", "guest_n",
+      # "intrpt")
+      CPU_METRIC="total",
+    ),
+    engine_name=None,
+    # Request save notebook after each cell execution
+    request_save_on_cell_execute=True,
+    # Save every 60s in the middle of long cell executions
+    autosave_cell_every=60,
+    prepare_only=False,
+    kernel_name=None,
+    language=None,
+    # Show progress bar
+    progress_bar=True,
+    log_output=False,
+    # Duration in seconds to wait for kernel start-up
+    start_timeout=60,
+    report_mode=False,
+    cwd=None
+  )
 
 
 if __name__ == "__main__":
