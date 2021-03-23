@@ -1,0 +1,21 @@
+account:
+  database: apt080.apt.emulab.net:5433
+  service:
+  - apt083.apt.emulab.net:9090
+follow:
+  database: null
+  service:
+  - apt083.apt.emulab.net:9092
+like:
+  database: null
+  service:
+  - apt083.apt.emulab.net:9093
+post:
+  database: apt080.apt.emulab.net:5434
+  service:
+  - apt083.apt.emulab.net:9094
+uniquepair:
+  database: apt080.apt.emulab.net:5435
+  service:
+  - apt083.apt.emulab.net:9095
+

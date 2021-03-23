@@ -1,0 +1,55 @@
+worker_processes 8;
+
+events {
+  worker_connections 512;
+}
+
+http {
+  default_type application/octet-stream;
+  keepalive_timeout 0;
+  upstream backend {
+    
+    server apt078.apt.emulab.net:8080;
+    
+  }
+  server {
+    listen 80;
+    location / {
+      proxy_pass http://backend;
+    }
+  }
+}
+[uwsgi]
+
+http-socket = 0.0.0.0:81
+
+cheaper-busyness-verbose = true
+
+cheaper = 2
+
+cheaper-initial = 4
+
+workers = 16
+
+cheaper-algo = spare
+
+cheaper-overload = 3
+
+cheaper-step = 1
+
+cheaper-busyness-max = 50
+
+cheaper-busyness-min = 25
+
+cheaper-busyness-multiplier = 20
+
+cheaper-busyness-penalty = 1
+
+cheaper-busyness-backlog-alert = 33
+
+cheaper-busyness-backlog-multiplier = 3
+
+busyness-backlog-step = 1
+
+busyness-backlog-nonzero = 60
+

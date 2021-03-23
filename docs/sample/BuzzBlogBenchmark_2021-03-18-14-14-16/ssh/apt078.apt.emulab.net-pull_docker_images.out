@@ -1,0 +1,67 @@
+Login Succeeded
+1.18.0: Pulling from library/nginx
+6f28985ad184: Pulling fs layer
+d70c01e66d75: Pulling fs layer
+79a94775412e: Pulling fs layer
+fdc1f7b7d7db: Pulling fs layer
+c4831b93fe53: Pulling fs layer
+d70c01e66d75: Waiting
+79a94775412e: Waiting
+6f28985ad184: Waiting
+fdc1f7b7d7db: Waiting
+6f28985ad184: Verifying Checksum
+6f28985ad184: Download complete
+79a94775412e: Verifying Checksum
+79a94775412e: Download complete
+d70c01e66d75: Verifying Checksum
+d70c01e66d75: Download complete
+fdc1f7b7d7db: Download complete
+c4831b93fe53: Download complete
+6f28985ad184: Pull complete
+d70c01e66d75: Pull complete
+79a94775412e: Pull complete
+fdc1f7b7d7db: Pull complete
+c4831b93fe53: Pull complete
+Digest: sha256:26132ea371bc9b83bc5ad197fef4b1b56577893d549a997201289850daa08524
+Status: Downloaded newer image for nginx:1.18.0
+docker.io/library/nginx:1.18.0
+apigateway_v0.1: Pulling from rodrigoalveslima/buzzblog
+83ee3a23efb7: Pulling fs layer
+db98fc6f11f0: Pulling fs layer
+f611acd52c6c: Pulling fs layer
+67afaeb19300: Pulling fs layer
+79e1f3156b3f: Pulling fs layer
+66cf431b0ea3: Pulling fs layer
+cf722cf540d8: Pulling fs layer
+671eef28ba0a: Pulling fs layer
+67afaeb19300: Waiting
+79e1f3156b3f: Waiting
+66cf431b0ea3: Waiting
+671eef28ba0a: Waiting
+cf722cf540d8: Waiting
+db98fc6f11f0: Verifying Checksum
+db98fc6f11f0: Download complete
+f611acd52c6c: Verifying Checksum
+f611acd52c6c: Download complete
+67afaeb19300: Verifying Checksum
+67afaeb19300: Download complete
+83ee3a23efb7: Verifying Checksum
+83ee3a23efb7: Download complete
+66cf431b0ea3: Verifying Checksum
+66cf431b0ea3: Download complete
+cf722cf540d8: Download complete
+671eef28ba0a: Verifying Checksum
+671eef28ba0a: Download complete
+79e1f3156b3f: Verifying Checksum
+79e1f3156b3f: Download complete
+83ee3a23efb7: Pull complete
+db98fc6f11f0: Pull complete
+f611acd52c6c: Pull complete
+67afaeb19300: Pull complete
+79e1f3156b3f: Pull complete
+66cf431b0ea3: Pull complete
+cf722cf540d8: Pull complete
+671eef28ba0a: Pull complete
+Digest: sha256:dd337438f0e92e4de599c4c2ffe13c4ca946bdeff9e54e778d70bc7a471ffcad
+Status: Downloaded newer image for rodrigoalveslima/buzzblog:apigateway_v0.1
+docker.io/rodrigoalveslima/buzzblog:apigateway_v0.1

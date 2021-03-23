@@ -1,0 +1,318 @@
+apt078.apt.emulab.net:
+  containers:
+    apigateway:
+      image: rodrigoalveslima/buzzblog:apigateway_v0.1
+      options:
+        cpuset-cpus: 8-15
+        detach: ''
+        memory: 8g
+        name: apigateway
+        publish: 8080:81
+        volume:
+        - /etc/uwsgi:/etc/uwsgi
+        - /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+    loadbalancer:
+      image: nginx:1.18.0
+      options:
+        cpuset-cpus: 0-7
+        detach: ''
+        memory: 8g
+        name: loadbalancer
+        publish: 8888:80
+        volume: /etc/nginx:/etc/nginx
+  kernel:
+    net.core.somaxconn: 128
+    net.ipv4.ip_local_port_range: 32768 65535
+    net.ipv4.tcp_abort_on_overflow: 1
+    net.ipv4.tcp_tw_reuse: 1
+  monitors:
+    collectl:
+      dirpath: /tmp/collectl
+      niceness: 19
+      options:
+        filename: /tmp/collectl/coll
+        interval: '0.05'
+        options: Tm
+        plot: ''
+        subsys: CDM
+    radvisor:
+      command: radvisor run docker
+      dirpath: /tmp/radvisor
+      niceness: 19
+      options:
+        buffer: 16MiB
+        directory: /tmp/radvisor
+        interval: 50ms
+        poll: 1s
+        quiet: ''
+    tcplife-bpfcc:
+      dirpath: /tmp/tcplife-bpfcc
+      log: /tmp/tcplife-bpfcc/tcplife-bpfcc.log
+      niceness: 19
+      options:
+        csv: ''
+        time: ''
+        timestamp: ''
+        wide: ''
+  ssh:
+    key_filename: /home/ral/.ssh/id_rsa
+    port: 22
+    username: ral
+  templates:
+    nginx.conf:
+      output: /etc/nginx/nginx.conf
+      params:
+        apigateway_servers:
+        - apt078.apt.emulab.net:8080
+        port: 80
+        worker_connections: 512
+        worker_processes: 8
+    uwsgi.ini:
+      output: /etc/uwsgi/uwsgi.ini
+      params:
+        params:
+          busyness-backlog-nonzero: 60
+          busyness-backlog-step: 1
+          cheaper: 2
+          cheaper-algo: spare
+          cheaper-busyness-backlog-alert: 33
+          cheaper-busyness-backlog-multiplier: 3
+          cheaper-busyness-max: 50
+          cheaper-busyness-min: 25
+          cheaper-busyness-multiplier: 20
+          cheaper-busyness-penalty: 1
+          cheaper-busyness-verbose: 'true'
+          cheaper-initial: 4
+          cheaper-overload: 3
+          cheaper-step: 1
+          http-socket: 0.0.0.0:81
+          workers: 16
+apt080.apt.emulab.net:
+  containers:
+    account_database:
+      image: postgres:13.1 -c max_connections=128
+      options:
+        cpuset-cpus: 0-5
+        detach: ''
+        env:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres
+        - POSTGRES_HOST_AUTH_METHOD=trust
+        memory: 6g
+        name: account_database
+        publish: 5433:5432
+        volume: /var/lib/postgresql/BuzzBlogApp/account/data:/var/lib/postgresql/data
+    post_database:
+      image: postgres:13.1 -c max_connections=128
+      options:
+        cpuset-cpus: 6-10
+        detach: ''
+        env:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres
+        - POSTGRES_HOST_AUTH_METHOD=trust
+        memory: 5g
+        name: post_database
+        publish: 5434:5432
+        volume: /var/lib/postgresql/BuzzBlogApp/post/data:/var/lib/postgresql/data
+    uniquepair_database:
+      image: postgres:13.1 -c max_connections=128
+      options:
+        cpuset-cpus: 11-15
+        detach: ''
+        env:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres
+        - POSTGRES_HOST_AUTH_METHOD=trust
+        memory: 5g
+        name: uniquepair_database
+        publish: 5435:5432
+        volume: /var/lib/postgresql/BuzzBlogApp/uniquepair/data:/var/lib/postgresql/data
+  kernel:
+    net.core.somaxconn: 128
+    net.ipv4.ip_local_port_range: 32768 65535
+    net.ipv4.tcp_abort_on_overflow: 1
+    net.ipv4.tcp_tw_reuse: 1
+  monitors:
+    collectl:
+      dirpath: /tmp/collectl
+      niceness: 19
+      options:
+        filename: /tmp/collectl/coll
+        interval: '0.05'
+        options: Tm
+        plot: ''
+        subsys: CDM
+    radvisor:
+      command: radvisor run docker
+      dirpath: /tmp/radvisor
+      niceness: 19
+      options:
+        buffer: 16MiB
+        directory: /tmp/radvisor
+        interval: 50ms
+        poll: 1s
+        quiet: ''
+    tcplife-bpfcc:
+      dirpath: /tmp/tcplife-bpfcc
+      log: /tmp/tcplife-bpfcc/tcplife-bpfcc.log
+      niceness: 19
+      options:
+        csv: ''
+        time: ''
+        timestamp: ''
+        wide: ''
+  ssh:
+    key_filename: /home/ral/.ssh/id_rsa
+    port: 22
+    username: ral
+apt083.apt.emulab.net:
+  containers:
+    account_service:
+      image: rodrigoalveslima/buzzblog:account_v0.1
+      options:
+        cpuset-cpus: 0-3
+        detach: ''
+        env:
+        - port=9090
+        - threads=8
+        - backend_filepath=/etc/opt/BuzzBlogApp/backend.yml
+        - postgres_user=postgres
+        - postgres_password=postgres
+        - postgres_dbname=postgres
+        memory: 4g
+        name: account_service
+        publish: 9090:9090
+        volume: /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+    follow_service:
+      image: rodrigoalveslima/buzzblog:follow_v0.1
+      options:
+        cpuset-cpus: 4-6
+        detach: ''
+        env:
+        - port=9092
+        - threads=8
+        - backend_filepath=/etc/opt/BuzzBlogApp/backend.yml
+        - postgres_user=postgres
+        - postgres_password=postgres
+        - postgres_dbname=postgres
+        memory: 3g
+        name: follow_service
+        publish: 9092:9092
+        volume: /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+    like_service:
+      image: rodrigoalveslima/buzzblog:like_v0.1
+      options:
+        cpuset-cpus: 7-9
+        detach: ''
+        env:
+        - port=9093
+        - threads=8
+        - backend_filepath=/etc/opt/BuzzBlogApp/backend.yml
+        - postgres_user=postgres
+        - postgres_password=postgres
+        - postgres_dbname=postgres
+        memory: 3g
+        name: like_service
+        publish: 9093:9093
+        volume: /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+    post_service:
+      image: rodrigoalveslima/buzzblog:post_v0.1
+      options:
+        cpuset-cpus: 10-12
+        detach: ''
+        env:
+        - port=9094
+        - threads=8
+        - backend_filepath=/etc/opt/BuzzBlogApp/backend.yml
+        - postgres_user=postgres
+        - postgres_password=postgres
+        - postgres_dbname=postgres
+        memory: 3g
+        name: post_service
+        publish: 9094:9094
+        volume: /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+    uniquepair_service:
+      image: rodrigoalveslima/buzzblog:uniquepair_v0.1
+      options:
+        cpuset-cpus: 13-15
+        detach: ''
+        env:
+        - port=9095
+        - threads=8
+        - backend_filepath=/etc/opt/BuzzBlogApp/backend.yml
+        - postgres_user=postgres
+        - postgres_password=postgres
+        - postgres_dbname=postgres
+        memory: 3g
+        name: uniquepair_service
+        publish: 9095:9095
+        volume: /etc/opt/BuzzBlogApp:/etc/opt/BuzzBlogApp
+  kernel:
+    net.core.somaxconn: 128
+    net.ipv4.ip_local_port_range: 32768 65535
+    net.ipv4.tcp_abort_on_overflow: 1
+    net.ipv4.tcp_tw_reuse: 1
+  monitors:
+    collectl:
+      dirpath: /tmp/collectl
+      niceness: 19
+      options:
+        filename: /tmp/collectl/coll
+        interval: '0.05'
+        options: Tm
+        plot: ''
+        subsys: CDM
+    radvisor:
+      command: radvisor run docker
+      dirpath: /tmp/radvisor
+      niceness: 19
+      options:
+        buffer: 16MiB
+        directory: /tmp/radvisor
+        interval: 50ms
+        poll: 1s
+        quiet: ''
+    tcplife-bpfcc:
+      dirpath: /tmp/tcplife-bpfcc
+      log: /tmp/tcplife-bpfcc/tcplife-bpfcc.log
+      niceness: 19
+      options:
+        csv: ''
+        time: ''
+        timestamp: ''
+        wide: ''
+  ssh:
+    key_filename: /home/ral/.ssh/id_rsa
+    port: 22
+    username: ral
+apt087.apt.emulab.net:
+  containers:
+    loadgen:
+      image: rodrigoalveslima/buzzblog:loadgen_v0.1
+      logs:
+      - /var/log/loadgen.log
+      options:
+        env:
+        - hostname=apt078.apt.emulab.net
+        - port=8888
+        name: loadgen
+        volume:
+        - /usr/local/etc/loadgen:/usr/local/etc/loadgen
+  monitors:
+    collectl:
+      dirpath: /tmp/collectl
+      niceness: 19
+      options:
+        filename: /tmp/collectl/coll
+        interval: '0.05'
+        options: Tm
+        plot: ''
+        subsys: CDM
+  ssh:
+    key_filename: /home/ral/.ssh/id_rsa
+    port: 22
+    username: ral

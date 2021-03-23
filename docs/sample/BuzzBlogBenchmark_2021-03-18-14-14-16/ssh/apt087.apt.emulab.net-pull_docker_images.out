@@ -1,0 +1,72 @@
+Login Succeeded
+loadgen_v0.1: Pulling from rodrigoalveslima/buzzblog
+0ecb575e629c: Pulling fs layer
+7467d1831b69: Pulling fs layer
+feab2c490a3c: Pulling fs layer
+f15a0f46f8c3: Pulling fs layer
+937782447ff6: Pulling fs layer
+e78b7aaaab2c: Pulling fs layer
+b68a1c52a41c: Pulling fs layer
+ddcd772f47ec: Pulling fs layer
+aef84dafa567: Pulling fs layer
+c61d20211bde: Pulling fs layer
+756a786dbf7d: Pulling fs layer
+207402665939: Pulling fs layer
+2641c93cfe63: Pulling fs layer
+f15a0f46f8c3: Waiting
+cabf2deac538: Pulling fs layer
+89e4387bc812: Pulling fs layer
+937782447ff6: Waiting
+aef84dafa567: Waiting
+ddcd772f47ec: Waiting
+2641c93cfe63: Waiting
+756a786dbf7d: Waiting
+c61d20211bde: Waiting
+b68a1c52a41c: Waiting
+207402665939: Waiting
+e78b7aaaab2c: Waiting
+cabf2deac538: Waiting
+7467d1831b69: Verifying Checksum
+7467d1831b69: Download complete
+feab2c490a3c: Verifying Checksum
+feab2c490a3c: Download complete
+0ecb575e629c: Download complete
+f15a0f46f8c3: Verifying Checksum
+f15a0f46f8c3: Download complete
+e78b7aaaab2c: Verifying Checksum
+e78b7aaaab2c: Download complete
+ddcd772f47ec: Download complete
+aef84dafa567: Verifying Checksum
+aef84dafa567: Download complete
+b68a1c52a41c: Verifying Checksum
+b68a1c52a41c: Download complete
+c61d20211bde: Verifying Checksum
+c61d20211bde: Download complete
+207402665939: Download complete
+756a786dbf7d: Verifying Checksum
+756a786dbf7d: Download complete
+2641c93cfe63: Download complete
+cabf2deac538: Verifying Checksum
+cabf2deac538: Download complete
+937782447ff6: Verifying Checksum
+937782447ff6: Download complete
+89e4387bc812: Verifying Checksum
+89e4387bc812: Download complete
+0ecb575e629c: Pull complete
+7467d1831b69: Pull complete
+feab2c490a3c: Pull complete
+f15a0f46f8c3: Pull complete
+937782447ff6: Pull complete
+e78b7aaaab2c: Pull complete
+b68a1c52a41c: Pull complete
+ddcd772f47ec: Pull complete
+aef84dafa567: Pull complete
+c61d20211bde: Pull complete
+756a786dbf7d: Pull complete
+207402665939: Pull complete
+2641c93cfe63: Pull complete
+cabf2deac538: Pull complete
+89e4387bc812: Pull complete
+Digest: sha256:510e2332eb294dc5a4a79631ab11d642c588ae0b947698ec9795e8c8c361d5d7
+Status: Downloaded newer image for rodrigoalveslima/buzzblog:loadgen_v0.1
+docker.io/rodrigoalveslima/buzzblog:loadgen_v0.1
