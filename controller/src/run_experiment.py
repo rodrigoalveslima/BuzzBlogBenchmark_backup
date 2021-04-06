@@ -442,7 +442,7 @@ def execute_notebook():
       # Environment (options: "colab", "local")
       ENV="local",
       # Experiment directory name
-      EXPERIMENT="../../docs/sample/BuzzBlogBenchmark_2021-03-18-14-14-16",
+      EXPERIMENT=DIRNAME,
       # REQUEST LOGS
       # Fine-grained window to group PIT data
       PIT_FG_WINDOW_IN_MS=50,
