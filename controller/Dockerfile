@@ -35,10 +35,12 @@ RUN wget --quiet -O /var/tmp/BuzzBlogApp.zip https://github.com/rodrigoalveslima
 
 # Copy source code.
 COPY src /usr/local/src/BuzzBlogBenchmark
-COPY notebooks /usr/local/src/BuzzBlogBenchmark/notebooks
 
 # Install Python dependencies.
 RUN pip3 install -r /usr/local/src/BuzzBlogBenchmark/requirements.txt
+
+# Install Python dependencies for analysis.
+RUN pip3 install -r /usr/local/src/BuzzBlogBenchmark/analysis/requirements.txt
 
 # Start the experiment.
 CMD ["/bin/bash", "-c", "python3 -u /usr/local/src/BuzzBlogBenchmark/run_experiment.py --description \"$description\" --system_conf /usr/local/etc/BuzzBlogBenchmark/system.yml --workload_conf /usr/local/etc/BuzzBlogBenchmark/workload.yml --docker_hub_username $docker_hub_username --docker_hub_password $docker_hub_password"]

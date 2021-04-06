@@ -15,7 +15,6 @@ import yaml
 
 from ssh_client import SSHClient
 
-
 ### Global variables
 
 DOCKER_HUB_USERNAME = ""
@@ -25,8 +24,8 @@ METADATA = {}
 SYS_CONF = {}
 WL_CONF = {}
 BACKEND_CONF = {}
-ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "notebooks/BuzzBlogExperimentAnalysisTemplate.ipynb"
-ANALYSIS_NOTEBOOK_OUTPUT_PATH = f"{DIRNAME}/analysis/BuzzBlogExperimentAnalysisOutput.ipynb"
+ANALYSIS_NOTEBOOK_TEMPLATE_FILE_NAME = "BuzzBlogExperimentAnalysisTemplate.ipynb"
+ANALYSIS_NOTEBOOK_OUTPUT_FILE_NAME = "BuzzBlogExperimentAnalysisOutput.ipynb"
 
 
 ### Utilities
@@ -432,10 +431,11 @@ def main():
 
 
 def execute_notebook():
+  os.mkdir(os.path.join(DIRNAME, "analysis"))
   papermill.execute_notebook(
-    input_path=ANALYSIS_NOTEBOOK_TEMPLATE_PATH,
+    input_path=f"./analysis/templates/{ANALYSIS_NOTEBOOK_TEMPLATE_FILE_NAME}",
     # Path to save executed notebook is same as input_path.
-    output_path=ANALYSIS_NOTEBOOK_OUTPUT_PATH,
+    output_path=f"{DIRNAME}/analysis/{ANALYSIS_NOTEBOOK_OUTPUT_FILE_NAME}",
     # Arbitrary keyword arguments to pass to the notebook parameters.
     parameters=dict(
       # GENERAL
