@@ -25,7 +25,7 @@ METADATA = {}
 SYS_CONF = {}
 WL_CONF = {}
 BACKEND_CONF = {}
-ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "../notebooks/BuzzBlogExperimentAnalysisTemplate.ipynb"
+ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "notebooks/BuzzBlogExperimentAnalysisTemplate.ipynb"
 ANALYSIS_NOTEBOOK_OUTPUT_PATH = f"{DIRNAME}/analysis/BuzzBlogExperimentAnalysisOutput.ipynb"
 
 
