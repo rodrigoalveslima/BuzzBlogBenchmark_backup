@@ -25,7 +25,7 @@ METADATA = {}
 SYS_CONF = {}
 WL_CONF = {}
 BACKEND_CONF = {}
-ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "templates/BuzzBlogExperimentAnalysisTemplate.ipynb"
+ANALYSIS_NOTEBOOK_TEMPLATE_PATH = "../notebooks/BuzzBlogExperimentAnalysisTemplate.ipynb"
 ANALYSIS_NOTEBOOK_OUTPUT_PATH = "BuzzBlogExperimentAnalysisOutput.ipynb"
 
 
@@ -443,18 +443,6 @@ def execute_notebook():
       ENV="local",
       # Experiment directory name
       EXPERIMENT="../../docs/sample/BuzzBlogBenchmark_2021-03-18-14-14-16",
-      LOADGEN_NODE="apt087.apt.emulab.net",
-      # DIRECTORY STRUCTURE
-      LOADBALANCER_NODE="apt078.apt.emulab.net",
-      APIGATEWAY_NODE="apt078.apt.emulab.net",
-      ACCOUNT_SERVICE_NODE="apt083.apt.emulab.net",
-      ACCOUNT_DB_NODE="apt080.apt.emulab.net",
-      FOLLOW_SERVICE_NODE="apt083.apt.emulab.net",
-      LIKE_SERVICE_NODE="apt083.apt.emulab.net",
-      POST_SERVICE_NODE="apt083.apt.emulab.net",
-      POST_DB_NODE="apt080.apt.emulab.net",
-      UNIQUEPAIR_SERVICE_NODE="apt083.apt.emulab.net",
-      UNIQUEPAIR_DB_NODE="apt080.apt.emulab.net",
       # REQUEST LOGS
       # Fine-grained window to group PIT data
       PIT_FG_WINDOW_IN_MS=50,
