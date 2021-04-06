@@ -35,6 +35,7 @@ RUN wget --quiet -O /var/tmp/BuzzBlogApp.zip https://github.com/rodrigoalveslima
 
 # Copy source code.
 COPY src /usr/local/src/BuzzBlogBenchmark
+COPY notebooks /usr/local/src/BuzzBlogBenchmark/notebooks
 
 # Install Python dependencies.
 RUN pip3 install -r /usr/local/src/BuzzBlogBenchmark/requirements.txt
