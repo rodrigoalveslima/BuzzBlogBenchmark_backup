@@ -433,7 +433,7 @@ def main():
 def execute_notebook():
   os.mkdir(os.path.join(DIRNAME, "analysis"))
   papermill.execute_notebook(
-    input_path=f"./analysis/templates/{ANALYSIS_NOTEBOOK_TEMPLATE_FILE_NAME}",
+    input_path=f"/usr/local/src/BuzzBlogBenchmark/analysis/templates/{ANALYSIS_NOTEBOOK_TEMPLATE_FILE_NAME}",
     # Path to save executed notebook is same as input_path.
     output_path=f"{DIRNAME}/analysis/{ANALYSIS_NOTEBOOK_OUTPUT_FILE_NAME}",
     # Arbitrary keyword arguments to pass to the notebook parameters.
