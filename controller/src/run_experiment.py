@@ -432,6 +432,24 @@ def main():
 
 def execute_notebook():
   os.mkdir(os.path.join(DIRNAME, "analysis"))
+
+  # This will be removed shortly, once notebook is refactored.
+  hosts = {}
+  for node_hostname, node_conf in SYS_CONF.items():
+    for container in ("apigateway",
+                      "loadbalancer",
+                      "account_database",
+                      "post_database",
+                      "uniquepair_database",
+                      "account_service",
+                      "follow_service",
+                      "like_service",
+                      "post_service",
+                      "uniquepair_service",
+                      "loadgen"):
+      if container in node_conf.get("containers", {}):
+        hosts[container] = node_hostname
+
   papermill.execute_notebook(
     input_path=f"/usr/local/src/BuzzBlogBenchmark/analysis/templates/{ANALYSIS_NOTEBOOK_TEMPLATE_FILE_NAME}",
     # Path to save executed notebook is same as input_path.
@@ -443,6 +461,17 @@ def execute_notebook():
       ENV="local",
       # Experiment directory name
       EXPERIMENT=DIRNAME,
+      LOADGEN_NODE=hosts["loadgen"],
+      LOADBALANCER_NODE=hosts["loadbalancer"],
+      APIGATEWAY_NODE=hosts["apigateway"],
+      ACCOUNT_SERVICE_NODE=hosts["account_service"],
+      ACCOUNT_DB_NODE=hosts["account_database"],
+      FOLLOW_SERVICE_NODE=hosts["follow_service"],
+      LIKE_SERVICE_NODE=hosts["like_service"],
+      POST_SERVICE_NODE=hosts["post_service"],
+      POST_DB_NODE=hosts["post_database"],
+      UNIQUEPAIR_SERVICE_NODE=hosts["uniquepair_service"],
+      UNIQUEPAIR_DB_NODE=hosts["uniquepair_database"],
       # REQUEST LOGS
       # Fine-grained window to group PIT data
       PIT_FG_WINDOW_IN_MS=50,
