@@ -41,5 +41,8 @@ COPY src /usr/local/src/BuzzBlogBenchmark
 # Install Python dependencies.
 RUN pip3 install -r /usr/local/src/BuzzBlogBenchmark/requirements.txt
 
+# Install Python dependencies for analysis.
+RUN pip3 install -r /usr/local/src/BuzzBlogBenchmark/analysis/requirements.txt
+
 # Start the experiment.
 CMD ["/bin/bash", "-c", "python3 -u /usr/local/src/BuzzBlogBenchmark/run_experiment.py --description \"$description\" --system_conf \"$system_conf\" --workload_conf \"$workload_conf\" --docker_hub_username \"$docker_hub_username\" --docker_hub_password \"$docker_hub_password\""]
