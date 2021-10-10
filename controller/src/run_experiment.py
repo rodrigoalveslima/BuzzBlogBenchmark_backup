@@ -386,7 +386,7 @@ def main():
         container_addr = node_hostname + ":" + \
             container_conf["options"]["publish"].split(':')[0]
         if container_basename not in BACKEND_CONF:
-          BACKEND_CONF[container_basename] = {"service": [], "database": None}
+          BACKEND_CONF[container_basename] = {"service": []}
         if container_type == "service":
           BACKEND_CONF[container_basename][container_type].append(
               container_addr)
