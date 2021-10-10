@@ -55,7 +55,7 @@
       output: "/etc/gunicorn/gunicorn.conf.py"
       params:
         bind: "0.0.0.0:81"
-        workers: 4
+        threads: 4
   containers:
     loadbalancer:
       image: "nginx:1.18.0"

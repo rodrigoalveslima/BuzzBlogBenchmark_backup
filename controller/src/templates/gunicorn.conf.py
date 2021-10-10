@@ -1,2 +1,3 @@
 bind = "{{ bind }}"
-workers = {{ workers }}
+workers = 1
+threads = {{ threads }}
