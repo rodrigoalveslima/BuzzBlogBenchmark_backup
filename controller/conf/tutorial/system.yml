@@ -69,7 +69,7 @@
       image: "rodrigoalveslima/buzzblog:apigateway_latest"
       start_order: 3
       logs:
-        - "/tmp/logger"
+        - "/tmp/calls.log"
       options:
         name: "apigateway1"
         publish: "8080:81"
@@ -81,7 +81,7 @@
       image: "rodrigoalveslima/buzzblog:apigateway_latest"
       start_order: 3
       logs:
-        - "/tmp/logger"
+        - "/tmp/calls.log"
       options:
         name: "apigateway2"
         publish: "8081:81"
@@ -93,7 +93,7 @@
       image: "rodrigoalveslima/buzzblog:apigateway_latest"
       start_order: 3
       logs:
-        - "/tmp/logger"
+        - "/tmp/calls.log"
       options:
         name: "apigateway3"
         publish: "8082:81"
@@ -105,7 +105,7 @@
       image: "rodrigoalveslima/buzzblog:apigateway_latest"
       start_order: 3
       logs:
-        - "/tmp/logger"
+        - "/tmp/calls.log"
       options:
         name: "apigateway4"
         publish: "8083:81"
